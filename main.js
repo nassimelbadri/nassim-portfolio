@@ -107,3 +107,54 @@ if (copyBtn) {
     });
 }
 
+// Download CV functionality
+const downloadCVBtn = document.getElementById('download-cv');
+
+if (downloadCVBtn) {
+    downloadCVBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        
+        const cvPath = downloadCVBtn.getAttribute('data-cv-path');
+        const fileName = 'Nassim_Elbadri_CV.pdf';
+        
+        try {
+            // Attempt direct download
+            const response = await fetch(cvPath);
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch CV');
+            }
+            
+            const blob = await response.blob();
+            
+            // Create blob URL and download
+            const blobUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = fileName;
+            link.style.display = 'none';
+            
+            // Append to body, click, and remove
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Clean up blob URL
+            window.URL.revokeObjectURL(blobUrl);
+            
+            console.log('CV downloaded successfully');
+        } catch (error) {
+            console.error('Download failed, attempting fallback:', error);
+            
+            // Fallback: Open in new tab
+            try {
+                window.open(cvPath, '_blank');
+                console.log('CV opened in new tab as fallback');
+            } catch (fallbackError) {
+                console.error('Fallback failed:', fallbackError);
+                alert('Unable to download CV. Please try again.');
+            }
+        }
+    });
+}
+
