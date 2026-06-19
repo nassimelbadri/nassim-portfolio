@@ -54,6 +54,20 @@ a {
   transition: all 0.3s ease;
 }
 
+a:focus {
+  outline: 2px solid var(--primary-accent);
+  outline-offset: 2px;
+}
+
+button {
+  font-family: inherit;
+}
+
+button:focus {
+  outline: 2px solid var(--primary-accent);
+  outline-offset: 2px;
+}
+
 ul {
   list-style: none;
 }
@@ -61,6 +75,23 @@ ul {
 img {
   max-width: 100%;
   height: auto;
+}
+
+/* Skip to main link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--primary-accent);
+  color: white;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  z-index: 100;
+  border-radius: 0 0 0.5rem 0;
+}
+
+.skip-link:focus {
+  top: 0;
 }
 
 /* ==========================================================================
@@ -1001,52 +1032,120 @@ h1, h2, h3, h4, h5, h6, .logo {
 /* ==========================================================================
    Media Queries
    ========================================================================== */
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 @media (max-width: 992px) {
+  .nav-container {
+    width: 95%;
+  }
+
   .stats-grid {
     padding: 1.5rem;
+    flex-direction: column;
+    gap: 1rem;
   }
+
   .stat-divider {
     display: none;
   }
+
+  .stat-item {
+    min-width: auto;
+  }
+
   .project-showcase {
     grid-template-columns: 1fr;
   }
+
+  .project-content {
+    padding: 1.5rem;
+  }
+
   .info-grid {
     grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .value-prop-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
 }
 
 @media (max-width: 768px) {
+  :root {
+    --section-padding: 3rem 0;
+  }
+
+  html {
+    font-size: 15px;
+  }
+
+  .container {
+    width: 95%;
+  }
+
   .desktop-nav {
     display: none;
     position: absolute;
     top: 4.5rem;
     left: 0;
     width: 100%;
-    background: rgba(10, 15, 28, 0.95);
+    background: rgba(10, 15, 28, 0.98);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--glass-border);
     flex-direction: column;
     padding: 2rem;
     gap: 1.5rem;
+    z-index: 999;
   }
 
   .desktop-nav.active {
     display: flex;
   }
 
+  .desktop-nav a:not(.btn-primary-small) {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
   .mobile-menu-btn {
     display: block;
+  }
+
+  .headline {
+    font-size: clamp(2.2rem, 6vw, 3.5rem);
+  }
+
+  .subheadline {
+    font-size: clamp(1rem, 2vw, 1.5rem);
   }
 
   .hero-buttons {
     flex-direction: column;
     width: 100%;
+    gap: 0.75rem;
   }
 
   .btn-primary, .btn-secondary, .btn-glass {
     width: 100%;
+    padding: 0.75rem 1rem;
+  }
+
+  .hero-section {
+    min-height: auto;
+    padding-top: 6rem;
+    padding-bottom: 3rem;
   }
 
   .stats-section {
@@ -1054,21 +1153,242 @@ h1, h2, h3, h4, h5, h6, .logo {
     padding: 2rem 0;
   }
 
-  .about-content {
-    padding: 2rem;
+  .stats-grid {
+    flex-direction: column;
+    padding: 1.5rem;
+    gap: 1.5rem;
   }
+
+  .section-title {
+    font-size: 1.75rem;
+  }
+
+  .about-content {
+    padding: 1.5rem;
+  }
+
+  .about-text p {
+    font-size: 1rem;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .skill-category {
+    padding: 1.5rem;
+  }
+
   .focus-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
   }
+
+  .focus-item {
+    padding: 1rem;
+  }
+
   .lang-grid {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 1rem;
   }
+
+  .lang-item {
+    padding: 0.75rem;
+  }
+
+  .project-showcase {
+    margin-bottom: 2rem;
+    gap: 1rem;
+  }
+
+  .project-image {
+    max-height: 250px;
+  }
+
   .premium-contact-card {
     padding: 1.5rem;
   }
+
   .contact-row {
     flex-direction: column;
     text-align: center;
     gap: 1rem;
+    padding: 1rem;
+  }
+
+  .contact-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .btn-copy {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .timeline::before {
+    left: 12px;
+  }
+
+  .timeline-item {
+    padding-left: 40px;
+    margin-bottom: 2rem;
+  }
+
+  .timeline-dot {
+    left: 6px;
+    width: 14px;
+    height: 14px;
+    border-width: 2px;
+  }
+
+  .value-prop-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .value-prop-card {
+    padding: 1.5rem;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    width: 100%;
+    padding: 0 1rem;
+  }
+
+  .nav-container {
+    width: 100%;
+    padding: 0 1rem;
+  }
+
+  .logo {
+    font-size: 1.25rem;
+  }
+
+  .headline {
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .greeting {
+    font-size: 0.95rem;
+  }
+
+  .stats-grid {
+    padding: 1rem;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+  }
+
+  .hero-buttons {
+    gap: 0.5rem;
+  }
+
+  .btn-primary, .btn-secondary, .btn-glass {
+    padding: 0.65rem 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .hero-content {
+    padding: 0 1rem;
+  }
+
+  .about-content {
+    padding: 1rem;
+  }
+
+  .premium-contact-card {
+    padding: 1rem;
+  }
+
+  .contact-row {
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .contact-label {
+    font-size: 0.75rem;
+  }
+
+  .contact-value {
+    font-size: 0.95rem;
+  }
+
+  .glass-card {
+    border-radius: 0.75rem;
+  }
+
+  .btn-primary-small, .btn-secondary {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .project-showcase {
+    overflow: visible;
+  }
+
+  .project-image img {
+    max-height: 200px;
+    object-fit: cover;
+  }
+
+  .focus-grid {
+    padding: 0.75rem;
+    gap: 0.75rem;
+  }
+
+  .focus-item {
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .focus-item svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .lang-grid {
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .cert-list {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+
+  .cert-item {
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.75rem;
   }
 }
